@@ -21,7 +21,6 @@
 #-----------------------------------------------
 library(dplyr)           # Data manipulation
 library(ordinal)         # For clmm() and clm() functions (cumulative link models)
-library(MASS)            # For polr(), used in proportional odds models 
 library(brant)           # To check the proportional odds assumption using the Brant test
 library(emmeans)         # For post-hoc pairwise comparisons
 library(MuMIn)           # For AICc calculations and model selection
@@ -39,10 +38,7 @@ options(na.action = "na.exclude")
 #-----------------------------------------------
 # Assumption Checks: Proportional Odds using the Brant Test
 #-----------------------------------------------
-# Fit a proportional odds model with polr (from MASS) for comparison
-mod_polr <- polr(PAImpact ~ PrimaryObjective + Interventions + SpeciesFocus + Diet + MigStatus, 
-                 data = birddata, Hess = TRUE)
-brant(mod_polr)
+
 # Run Brant tests for individual predictors if necessary
 brant(polr(PAImpact ~ PrimaryObjective, data = birddata, Hess = TRUE))
 brant(polr(PAImpact ~ Interventions, data = birddata, Hess = TRUE))
@@ -106,11 +102,16 @@ mod_full_managementstrats <- clmm(PAImpact ~ PrimaryObjective + Interventions + 
 mod_full_traits <- clmm(PAImpact ~ Diet + MigStatus + WaterbirdType +
                           (1 | SiteName) + (1 | Species), data = birddata)
 
-mod_full_targets <- clmm(PAImpact ~ Target + SpeciesStatus + SpecificTargetSp +
+mod_full_targets <- clmm(PAImpact ~ Target +  SpeciesStatus +
                            (1 | SiteName) + (1 | Species), data = birddata)
+## because sp status violated the poa so ran seperate ppo model, not included in full mod
 summary(mod_full_managementstrats)
 summary(mod_full_traits)
 summary(mod_full_targets)
+
+
+
+
 
 
 ## test for multicollineraity between strats and traits (bc interacting)
@@ -285,7 +286,7 @@ aicc_targets_df$Weight <- aicc_targets_df$Weight / sum(aicc_targets_df$Weight)
 print(aicc_targets_df[order(aicc_targets_df$Delta_AICc), ])
 
 
-### ANOVA for Full Management Strategy Model
+##### ANOVA for Full Management Strategy Model
 
 # since the three management strategies are employed simultaneously 
 #and all three showed spatial autocorrelation — meaning nearby PAs tend to use similar approaches.
@@ -345,7 +346,3 @@ print(or_all)
 #-----------------------------------------------
 # End of 03_modelling.R
 ################################################################################
-
-
-
-
