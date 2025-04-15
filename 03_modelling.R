@@ -122,7 +122,7 @@ design_matrix <- model.matrix(~ PrimaryObjective + Interventions + SpeciesFocus 
 condition_number <- kappa(design_matrix)
 print(condition_number)
 
-# cn= 16.1 ----> low/moderature collinearity- though not an issue
+# cn= 16.1 ----> low/moderate collinearity- though not an issue
 
 # collinearity between management strats (bc sites employed all 3 and i found spatial autocorrelation between all strats)
 design_matrixstrat <- model.matrix(~ PrimaryObjective + Interventions + SpeciesFocus, data = birddata)
