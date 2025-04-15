@@ -9,7 +9,7 @@
 #   - Target models (Target, SpecificTargetSp, SpeciesStatus),
 #   - Interaction models (between species traits and management strats),
 #   - Full models combining multiple predictors,
-#   - Model comparisons (anova, AICc, likelihood ratio tests),
+#   - Model comparisons (AICc),
 #   - Extraction of odds ratios with confidence intervals.
 #
 # All analyses are conducted on the birddata dataset (previously cleaned in the 
@@ -21,7 +21,7 @@
 #-----------------------------------------------
 library(dplyr)           # Data manipulation
 library(ordinal)         # For clmm() and clm() functions (cumulative link models)
-library(MASS)            # For polr(), used in proportional odds models (Venables & Ripley, 2002)
+library(MASS)            # For polr(), used in proportional odds models 
 library(brant)           # To check the proportional odds assumption using the Brant test
 library(emmeans)         # For post-hoc pairwise comparisons
 library(MuMIn)           # For AICc calculations and model selection
@@ -84,9 +84,9 @@ summary(mod_wbt)
 
 # 4. Target Models (Research Question 3)
 mod_target <- clmm(PAImpact ~ Target + (1 | SiteName) + (1 | Species), data = birddata)
-mod_spectarg <- clmm(PAImpact ~ SpecificTargetSp + (1 | SiteName) + (1 | Species), data = birddata)
+mod_status <- clmm(PAImpact ~ SpeciesStatus + (1 | SiteName) + (1 | Species), data = birddata)
 summary(mod_target)
-summary(mod_spectarg)
+summary(mod_status)
 
 # partial prop odds model
 mod_stsppom <- clm(PAImpact ~ SpecificTargetSp, data = birddata, link = "logit", parallel = FALSE)
@@ -156,6 +156,7 @@ summary(mod_spfocus_mig)
 summary(mod_spfocus_target)
 summary(mod_spfocus_wbt)
 
+
 #-----------------------------------------------
 # Random Slopes Testing
 #-----------------------------------------------
@@ -200,79 +201,97 @@ anova(mod_status, mod_status_random_slopes)
 # Model Comparison Using AICc
 #-----------------------------------------------
 
-# Compute AICc values
-aicc_comparison <- data.frame(
-  Predictor = c(
-    "PrimaryObjective", "PrimaryObjective",
-    "Interventions", "Interventions",
-    "SpeciesFocus", "SpeciesFocus",
-    "Diet", "Diet",
-    "MigStatus", "MigStatus",
-    "WaterbirdType", "WaterbirdType",
-    "Target", "Target",
-    "SpeciesStatus", "SpeciesStatus",
-    "SpecificTargetSp"  # PPO model only
-  ),
-  Model_Type = c(
-    rep(c("Base", "Random Slopes"), 8),
-    "Base"  # Only a base PPO model for SpecificTargetSp
-  ),
-  AICc = c(
-    AICc(mod_primary), AICc(mod_primary_random_slopes),
-    AICc(mod_intervention), AICc(mod_intervention_random_slopes),
-    AICc(mod_speciesfocus), AICc(mod_speciesfocus_random_slopes),
-    AICc(mod_diet), AICc(mod_diet_random_slopes),
-    AICc(mod_migration), AICc(mod_migration_random_slopes),
-    AICc(mod_wbt), AICc(mod_wbt_random_slopes),
-    AICc(mod_target), AICc(mod_target_random_slopes),
-    AICc(mod_status), AICc(mod_status_random_slopes),
-    AICc(mod_stsppom)  # Partial proportional odds model only
-  )
+## management strats
+# Create a named vector of your model AICc values
+aicc_values <- c(
+  mod_null = AICc(mod_null),
+  mod_primary = AICc(mod_primary),
+  mod_primary_random_slopes = AICc(mod_primary_random_slopes),
+  mod_intervention = AICc(mod_intervention),
+  mod_intervention_random_slopes = AICc(mod_intervention_random_slopes),
+  mod_speciesfocus = AICc(mod_speciesfocus),
+  mod_speciesfocus_random_slopes = AICc(mod_speciesfocus_random_slopes),
+  mod_full_managementstrats = AICc(mod_full_managementstrats)
+)
+
+# Convert to data frame
+aicc_df <- data.frame(
+  Model = names(aicc_values),
+  AICc = aicc_values
+)
+
+# Calculate delta AICc and weights
+aicc_df$Delta_AICc <- aicc_df$AICc - min(aicc_df$AICc)
+aicc_df$Weight <- exp(-0.5 * aicc_df$Delta_AICc)
+aicc_df$Weight <- aicc_df$Weight / sum(aicc_df$Weight)
+
+# Print results
+print(aicc_df[order(aicc_df$Delta_AICc), ])
+
+# traits
+# Create a named vector with AICc values for trait-related models
+aicc_traits <- c(
+  mod_null = AICc(mod_null),
+  mod_diet = AICc(mod_diet),
+  mod_diet_random_slopes = AICc(mod_diet_random_slopes),
+  mod_migration = AICc(mod_migration),
+  mod_migration_random_slopes = AICc(mod_migration_random_slopes),
+  mod_wbt = AICc(mod_wbt),
+  mod_wbt_random_slopes = AICc(mod_wbt_random_slopes),
+  mod_full_traits = AICc(mod_full_traits)
+)
+
+# Convert to data frame
+aicc_traits_df <- data.frame(
+  Model = names(aicc_traits),
+  AICc = aicc_traits
+)
+
+# Calculate ΔAICc and weights
+aicc_traits_df$Delta_AICc <- aicc_traits_df$AICc - min(aicc_traits_df$AICc)
+aicc_traits_df$Weight <- exp(-0.5 * aicc_traits_df$Delta_AICc)
+aicc_traits_df$Weight <- aicc_traits_df$Weight / sum(aicc_traits_df$Weight)
+
+# Print ranked results
+print(aicc_traits_df[order(aicc_traits_df$Delta_AICc), ])
+
+
+
+
+# targets
+# Create named vector of AICc values for target-related models
+aicc_targets <- c(
+  mod_null = AICc(mod_null),
+  mod_target = AICc(mod_target),
+  mod_target_random_slopes = AICc(mod_target_random_slopes),
+  mod_stsppom = AICc(mod_stsppom),
+  mod_status = AICc(mod_status),
+  mod_status_random_slopes = AICc(mod_status_random_slopes),
+  mod_full_targets = AICc(mod_full_targets)
+)
+
+# Convert to a data frame
+aicc_targets_df <- data.frame(
+  Model = names(aicc_targets),
+  AICc = aicc_targets
 )
 
 # Calculate delta AICc and model weights
-aicc_comparison$Delta_AICc <- aicc_comparison$AICc - min(aicc_comparison$AICc)
-aicc_comparison$Weight <- exp(-0.5 * aicc_comparison$Delta_AICc) / sum(exp(-0.5 * aicc_comparison$Delta_AICc))
+aicc_targets_df$Delta_AICc <- aicc_targets_df$AICc - min(aicc_targets_df$AICc)
+aicc_targets_df$Weight <- exp(-0.5 * aicc_targets_df$Delta_AICc)
+aicc_targets_df$Weight <- aicc_targets_df$Weight / sum(aicc_targets_df$Weight)
 
-print(aicc_comparison)
-
-#-----------------------------------------------
-# Likelihood Ratio Tests
-#-----------------------------------------------
+# Print ranked model comparison
+print(aicc_targets_df[order(aicc_targets_df$Delta_AICc), ])
 
 
-# run clm for lrt for spectargsp ppo mod
-mod_nullclm <- clm(PAImpact ~ 1, data = birddata)
+### ANOVA for Full Management Strategy Model
 
-# Compare each model against the null model to assess the contribution of predictors
-
-anova(mod_null, mod_primary)
-anova(mod_null, mod_primary)
-anova(mod_null, mod_speciesfocus) # sig
-anova(mod_null, mod_intervention) # sig
-anova(mod_null, mod_diet) 
-anova(mod_null, mod_migration)
-anova(mod_null, mod_target) # doesnt run 
-anova(mod_null, mod_wbt)
-anova(mod_null, mod_status) # doesnt run
-anova(mod_nullclm, mod_stsppom)
-
-# manually calculate lrts for mod_target and mod_status
-lr_stat_target  <- -2 * (logLik(mod_null) - logLik(mod_target))
-lr_stat_status  <- -2 * (logLik(mod_null) - logLik(mod_status))
-
-p_target  <- 1 - pchisq(lr_stat_target, df = 1)
-p_status  <- 1 - pchisq(lr_stat_status, df = 1)
-
-cat("Likelihood ratio statistics:\n")
-cat("Target Model: LR =", signif(lr_stat_target, digits = 3), ", p =", signif(p_target, digits = 3), "\n")
-cat("Status Model: LR =", signif(lr_stat_status, digits = 3), ", p =", signif(p_status, digits = 3), "\n")
-
-
-# since management strats are employed simultaneously 
-# and all three were found to have spatial autocorrelation in geographically proximate sites
+# since the three management strategies are employed simultaneously 
+#and all three showed spatial autocorrelation — meaning nearby PAs tend to use similar approaches.
+# want to see whether any of these strats have a distinct effect when considered together
 Anova.clmm(mod_full_managementstrats)
-## none sig, likely due to overlapping effects among the management strategies
+## none sig, likely due to shared variance or overlapping explanatory power among strategies
 
 
 #-----------------------------------------------
@@ -326,3 +345,7 @@ print(or_all)
 #-----------------------------------------------
 # End of 03_modelling.R
 ################################################################################
+
+
+
+
