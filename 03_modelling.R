@@ -295,10 +295,36 @@ Anova.clmm(mod_full_managementstrats)
 ## none sig, likely due to shared variance or overlapping explanatory power among strategies
 
 
+
 #-----------------------------------------------
 # Odds Ratios Extraction & Visualisation
 #-----------------------------------------------
 # see appendix 
+
+extract_or <- function(model, model_name) {
+  coefs <- summary(model)$coefficients
+  coefs <- coefs[rownames(coefs) != "(Intercept)", , drop = FALSE]
+  
+  OR <- exp(coefs[, "Estimate"])
+  lower <- exp(coefs[, "Estimate"] - 1.96 * coefs[, "Std. Error"])
+  upper <- exp(coefs[, "Estimate"] + 1.96 * coefs[, "Std. Error"])
+  
+  pvals <- coefs[, "Pr(>|z|)"]
+  sig_labels <- cut(pvals,
+                    breaks = c(-Inf, 0.001, 0.01, 0.05, Inf),
+                    labels = c("***", "**", "*", "NS"))
+  
+  data.frame(
+    Model = model_name,
+    Variable = rownames(coefs),
+    OddsRatio = OR,
+    Lower_CI = lower,
+    Upper_CI = upper,
+    Significance = sig_labels,
+    row.names = NULL
+  )
+}
+
 
 # Create a named list of models
 model_list <- list(
@@ -312,37 +338,39 @@ model_list <- list(
   "Species Status" = mod_status
 )
 
+
 # Extract odds ratios
 or_all <- bind_rows(lapply(names(model_list), function(name) {
   extract_or(model_list[[name]], name)
-})) %>% filter(Variable != "(Intercept)")
+}))
+
+# Plot
+ggplot(or_all, aes(x = reorder(Variable, OddsRatio),
+                   y = OddsRatio,
+                   ymin = Lower_CI,
+                   ymax = Upper_CI,
+                   colour = Significance)) +
+  geom_pointrange(linewidth = 0.8) +
+  geom_hline(yintercept = 1, linetype = "dashed", colour = "grey40") +
+  coord_flip() +
+  facet_wrap(~ Model, scales = "free_y") +
+  labs(
+    x = "Predictor",
+    y = "Odds Ratio",
+    colour = "Significance"
+  ) +
+  scale_colour_manual(values = c(
+    "***" = "red",
+    "**" = "orange",
+    "*" = "blue",
+    "NS" = "grey60"
+  )) +
+  theme_classic() +
+  theme(strip.background = element_blank())
+
 
 print(or_all)
 
-  ggplot(or_all, aes(x = reorder(Variable, OddsRatio), 
-                     y = OddsRatio, 
-                     ymin = Lower_CI, 
-                     ymax = Upper_CI, 
-                     colour = Significance)) +
-    geom_pointrange(linewidth = 0.8) +
-    geom_hline(yintercept = 1, linetype = "dashed", colour = "grey40") +
-    coord_flip() +
-    facet_wrap(~ Model, scales = "free_y") +
-    labs(
-      x = "Predictor",
-      y = "Odds Ratio",
-      colour = "Significance"
-    ) +
-    scale_colour_manual(values = c(
-      "***" = "red",
-      "**"  = "orange",
-      "*"   = "blue",
-      "NS"  = "grey60"
-    )) +
-    theme_classic() +
-    theme( 
-      strip.background = element_blank())            
-  
 #-----------------------------------------------
 # End of 03_modelling.R
 ################################################################################
