@@ -16,6 +16,6 @@ The analysis involves spatial analysis, cumulative link mixed models (CLMMs), po
 ## Notes
 
 - All scripts are written in R.
-- To replicate the full analysis, run the scripts** ***in numerical order**,*** starting from `01_data_preprocessing.R` through to `05_mapping.R`.
+- To replicate the full analysis, run the scripts** **in numerical order**, starting from `01_data_preprocessing.R` through to `05_mapping.R`.
 - The conservation impact data for waterbirds is sourced from **Wauchope et al. (2022)**.
 - All management strategies have been sourced from publically available management plans. 
