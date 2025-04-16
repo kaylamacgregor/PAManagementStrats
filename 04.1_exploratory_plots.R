@@ -20,13 +20,13 @@ primary_counts <- birddata %>%
 
 primary_plot <- ggplot(primary_counts, aes(x = PrimaryObjective, y = n)) +
   geom_bar(stat = "identity", width = 0.7, fill = "darkolivegreen4") +
-  geom_text(aes(label = n), vjust = -0.5, size = 4, color = "black") +
+  geom_text(aes(label = n), vjust = -0.5, size = 4, colour = "black") +
   labs(x = "Primary Objective", y = "Number of Sites", fill = "Conservation Objective") +
   theme_classic() +
   scale_y_continuous(expand = c(0, 0), n.breaks = 10, breaks = seq(0, max(primary_counts$n) + 1, 1)) +
-  theme(axis.text.x = element_text(angle = 0, hjust = 0.5, size = 10, color = "black"),
-        axis.text.y = element_text(size = 10, color = "black"),
-        axis.title = element_text(size = 11, color = "black"),
+  theme(axis.text.x = element_text(angle = 0, hjust = 0.5, size = 10, colour = "black"),
+        axis.text.y = element_text(size = 10, colour = "black"),
+        axis.title = element_text(size = 11, colour = "black"),
         legend.position = "none",
         plot.title = element_blank(),
         plot.subtitle = element_blank(),
@@ -52,19 +52,19 @@ combined_counts <- bind_rows(intervention_counts, species_focus_counts)
 
 combined_plotbar <- ggplot(combined_counts, aes(x = Label, y = n, fill = Category)) +
   geom_bar(stat = "identity", width = 0.7) +
-  geom_text(aes(label = n), vjust = -0.5, size = 4, color = "black") +
+  geom_text(aes(label = n), vjust = -0.5, size = 4, colour = "black") +
   facet_wrap(~ Category, scales = "free_x") +
   scale_fill_manual(name = "Management Strategy",
                     values = c("Intervention" = "coral", "Species Focus" = "#8DA0CB")) +
   scale_y_continuous(expand = c(0, 0), n.breaks = 8) +
   labs(x = "", y = "Number of Sites") +
   theme_classic() +
-  theme(axis.text.x = element_text(angle = 0, hjust = 0.5, size = 9, color = "black"),
-        axis.text.y = element_text(size = 9, color = "black"),
-        axis.title = element_text(size = 10, color = "black"),
+  theme(axis.text.x = element_text(angle = 0, hjust = 0.5, size = 9, colour = "black"),
+        axis.text.y = element_text(size = 9, colour = "black"),
+        axis.title = element_text(size = 10, colour = "black"),
         strip.text.x = element_blank(),
-        legend.title = element_text(size = 9, color = "black"),
-        legend.text = element_text(size = 9, color = "black"),
+        legend.title = element_text(size = 9, colour = "black"),
+        legend.text = element_text(size = 9, colour = "black"),
         plot.margin = margin(t = 40, r = 10, b = 10, l = 10)) +
   coord_cartesian(clip = "off")
 
