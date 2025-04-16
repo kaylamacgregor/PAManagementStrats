@@ -21,6 +21,7 @@
 #-----------------------------------------------
 library(dplyr)           # Data manipulation
 library(ordinal)         # For clmm() and clm() functions (cumulative link models)
+library(MASS)
 library(brant)           # To check the proportional odds assumption using the Brant test
 library(emmeans)         # For post-hoc pairwise comparisons
 library(MuMIn)           # For AICc calculations and model selection
@@ -48,11 +49,20 @@ brant(polr(PAImpact ~ MigStatus, data = birddata, Hess = TRUE))
 brant(polr(PAImpact ~ WaterbirdType, data = birddata, Hess = TRUE))
 brant(polr(PAImpact ~ Target, data = birddata, Hess = TRUE))
 brant(polr(PAImpact ~ SpecificTargetSp, data = birddata, Hess = TRUE)) # violates poa (p=0.03)
-brant(polr(PAImpact ~ SpeciesStatus, data = birddata, Hess = TRUE))
+brant(polr(PAImpact ~ SpeciesStatus, data = birddata, Hess = TRUE)) # data warning, test may be invalid
+
+
+## for species status P=1
+# No evidence at all against the proportional odds assumption across the whole model.
+#  No evidence of that variable violating the assumption either
+
+
+
 
 # For predictors that violate the proportional odds assumption, fit a partial proportional odds model:
 # ie: mod_stsppom <- clm(PAImpact ~ SpecificTargetSp, data = birddata, link = "logit", parallel = FALSE)
 # summary(mod_stsppom)
+
 #-----------------------------------------------
 # Fit CLMM Models
 #-----------------------------------------------
@@ -84,9 +94,13 @@ mod_status <- clmm(PAImpact ~ SpeciesStatus + (1 | SiteName) + (1 | Species), da
 summary(mod_target)
 summary(mod_status)
 
-# partial prop odds model
+# partial prop odds model for specific target species and species status
 mod_stsppom <- clm(PAImpact ~ SpecificTargetSp, data = birddata, link = "logit", parallel = FALSE)
 summary(mod_stsppom)
+
+mod_ssppom <- clm(PAImpact ~ SpeciesStatus, data = birddata, link = "logit", parallel = FALSE)
+summary(mod_ssppom)
+
 
 # 5. Full Models
 
@@ -102,19 +116,15 @@ mod_full_managementstrats <- clmm(PAImpact ~ PrimaryObjective + Interventions + 
 mod_full_traits <- clmm(PAImpact ~ Diet + MigStatus + WaterbirdType +
                           (1 | SiteName) + (1 | Species), data = birddata)
 
-mod_full_targets <- clmm(PAImpact ~ Target +  SpeciesStatus +
-                           (1 | SiteName) + (1 | Species), data = birddata)
+
+# mod_full_targets irrelevent as both sptargsp and speciesstatus are partial prop odds model
+
 ## because sp status violated the poa so ran seperate ppo model, not included in full mod
 summary(mod_full_managementstrats)
 summary(mod_full_traits)
-summary(mod_full_targets)
 
 
-
-
-
-
-## test for multicollineraity between strats and traits (bc interacting)
+## test for multicollineraity between management strategies and species traits (as I'm interacing them in the models)
 
 # Create the design matrix for the fixed effects
 design_matrix <- model.matrix(~ PrimaryObjective + Interventions + SpeciesFocus + Diet + MigStatus + WaterbirdType, data = birddata)
@@ -147,6 +157,7 @@ mod_interv_wbt <- clmm(PAImpact ~ Interventions * WaterbirdType + (1 | SiteName)
 mod_spfocus_mig <- clmm(PAImpact ~ SpeciesFocus * MigStatus + (1 | SiteName) + (1 | Species), data = birddata)
 mod_spfocus_target <- clmm(PAImpact ~ SpeciesFocus * Target + (1 | SiteName) + (1 | Species), data = birddata) # doesnt converge
 mod_spfocus_wbt <- clmm(PAImpact ~ SpeciesFocus * WaterbirdType + (1 | SiteName) + (1 | Species), data = birddata)
+
 summary(mod_primary_diet)
 summary(mod_primary_migration)
 summary(mod_primary_wbt)
@@ -156,7 +167,6 @@ summary(mod_interv_wbt)
 summary(mod_spfocus_mig)
 summary(mod_spfocus_target)
 summary(mod_spfocus_wbt)
-
 
 #-----------------------------------------------
 # Random Slopes Testing
@@ -266,9 +276,7 @@ aicc_targets <- c(
   mod_target = AICc(mod_target),
   mod_target_random_slopes = AICc(mod_target_random_slopes),
   mod_stsppom = AICc(mod_stsppom),
-  mod_status = AICc(mod_status),
-  mod_status_random_slopes = AICc(mod_status_random_slopes),
-  mod_full_targets = AICc(mod_full_targets)
+  mod_ssppom = AICc(mod_ssppom)
 )
 
 # Convert to a data frame
@@ -293,7 +301,6 @@ print(aicc_targets_df[order(aicc_targets_df$Delta_AICc), ])
 # want to see whether any of these strats have a distinct effect when considered together
 Anova.clmm(mod_full_managementstrats)
 ## none sig, likely due to shared variance or overlapping explanatory power among strategies
-
 
 
 #-----------------------------------------------
@@ -374,3 +381,15 @@ print(or_all)
 #-----------------------------------------------
 # End of 03_modelling.R
 ################################################################################
+
+
+
+
+
+
+
+
+
+
+
+ 
