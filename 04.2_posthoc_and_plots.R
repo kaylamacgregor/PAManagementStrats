@@ -1,5 +1,5 @@
- 04.2_posthoc_and_plots.R
-#
+################################################################################
+# 04.2_posthoc_and_plots.R
 # Purpose:
 #   - Extract model predictions using ggpredict() from fitted CLMM models.
 #   - Generate ggplot figures for predictive probability plots.
