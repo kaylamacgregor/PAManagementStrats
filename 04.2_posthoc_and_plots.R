@@ -1,5 +1,4 @@
-################################################################################
-# 04.2_posthoc_and_plots.R
+ 04.2_posthoc_and_plots.R
 #
 # Purpose:
 #   - Extract model predictions using ggpredict() from fitted CLMM models.
@@ -210,66 +209,66 @@ glimpse(FitDat_spectarg)
 
 # ------------------------------
 # Plot 1: Primary Objective (grouped by PAImpact)
-plot1test <- ggplot(FitDat_primary, aes(x = PrimaryObjective, y = Predicted, color = PAImpact)) +
+plot1test <- ggplot(FitDat_primary, aes(x = PrimaryObjective, y = Predicted, colour = PAImpact)) +
   geom_point(position = position_dodge(width = 0.5), alpha = 1, size = 2) +
   geom_errorbar(aes(ymin = conf.low, ymax = conf.high), width = 0.2, alpha = 0.7,
                 position = position_dodge(width = 0.5)) +
   theme_classic() +
   theme(
-    axis.text.x  = element_text(angle = 0, hjust = 0.5, size = 10, color = "black"),
-    axis.text.y  = element_text(size = 10, color = "black"),
-    axis.title.x = element_text(size = 12, color = "black"),
+    axis.text.x  = element_text(angle = 0, hjust = 0.5, size = 10, colour = "black"),
+    axis.text.y  = element_text(size = 10, colour = "black"),
+    axis.title.x = element_text(size = 12, colour = "black"),
     axis.title.y = element_blank(),
-    legend.text  = element_text(size = 10, color = "black"),
+    legend.text  = element_text(size = 10, colour = "black"),
     legend.key.size = unit(0.5, "cm"),
     plot.margin  = unit(c(0.5, 0.5, 0.5, 1), "cm")
   ) +
-  labs(x = "Primary Objective of Management", color = "Conservation Impact", fill = "Impact") +
-  scale_color_manual(values = c("sienna3", "mediumpurple2", "#008080")) +
+  labs(x = "Primary Objective of Management", colour = "Conservation Impact", fill = "Impact") +
+  scale_colour_manual(values = c("sienna3", "mediumpurple2", "#008080")) +
   scale_fill_manual(values  = c("sienna3", "mediumpurple2", "#008080")) +
   scale_y_continuous(labels = scales::percent_format(accuracy = 1), limits = c(0, 1))
 
 
 # ------------------------------
 # Plot 2: Management Intervention (grouped by PAImpact)
-plot2test <- ggplot(FitDat_int, aes(x = Interventions, y = Predicted, color = PAImpact)) +
+plot2test <- ggplot(FitDat_int, aes(x = Interventions, y = Predicted, colour = PAImpact)) +
   geom_point(position = position_dodge(width = 0.5), alpha = 1, size = 2) +
   geom_errorbar(aes(ymin = conf.low, ymax = conf.high), width = 0.2, alpha = 0.7,
                 position = position_dodge(width = 0.5)) +
   theme_classic() +
   theme(
-    axis.text.x  = element_text(angle = 0, hjust = 0.5, size = 10, color = "black"),
-    axis.text.y  = element_text(size = 10, color = "black"),
-    axis.title.x = element_text(size = 12, color = "black"),
+    axis.text.x  = element_text(angle = 0, hjust = 0.5, size = 10, colour = "black"),
+    axis.text.y  = element_text(size = 10, colour = "black"),
+    axis.title.x = element_text(size = 12, colour = "black"),
     axis.title.y = element_blank(),
-    legend.text  = element_text(size = 10, color = "black"),
+    legend.text  = element_text(size = 10, colour = "black"),
     legend.key.size = unit(0.5, "cm"),
     plot.margin  = unit(c(0.5, 0.5, 0.5, 1), "cm")
   ) +
-  labs(x = "Management Intervention", color = "Conservation Impact", fill = "Impact") +
-  scale_color_manual(values = c("sienna3", "mediumpurple2", "#008080")) +
+  labs(x = "Management Intervention", colour = "Conservation Impact", fill = "Impact") +
+  scale_colour_manual(values = c("sienna3", "mediumpurple2", "#008080")) +
   scale_fill_manual(values  = c("sienna3", "mediumpurple2", "#008080")) +
   scale_y_continuous(labels = scales::percent_format(accuracy = 1), limits = c(0, 1))
 
 
 # ------------------------------
 # Plot 3: Species Focus (grouped by PAImpact)
-plot3test <- ggplot(FitDat_spf, aes(x = SpeciesFocus, y = Predicted, color = PAImpact)) +
+plot3test <- ggplot(FitDat_spf, aes(x = SpeciesFocus, y = Predicted, colour = PAImpact)) +
   geom_point(position = position_dodge(width = 0.5), alpha = 1, size = 2) +
   geom_errorbar(aes(ymin = conf.low, ymax = conf.high), width = 0.2, alpha = 0.7,
                 position = position_dodge(width = 0.5)) +
   theme_classic() +
   theme(
-    axis.text.x  = element_text(angle = 0, hjust = 0.5, size = 10, color = "black"),
-    axis.text.y  = element_text(size = 10, color = "black"),
-    axis.title.x = element_text(size = 12, color = "black"),
+    axis.text.x  = element_text(angle = 0, hjust = 0.5, size = 10, colour = "black"),
+    axis.text.y  = element_text(size = 10, colour = "black"),
+    axis.title.x = element_text(size = 12, colour = "black"),
     axis.title.y = element_blank(),
-    legend.text  = element_text(size = 10, color = "black"),
+    legend.text  = element_text(size = 10, colour = "black"),
     legend.key.size = unit(0.5, "cm"),
     plot.margin  = unit(c(0.5, 0.5, 0.5, 1), "cm")
   ) +
-  labs(x = "Species Focus", color = "Conservation Impact", fill = "Impact") +
-  scale_color_manual(values = c("sienna3", "mediumpurple2", "#008080")) +
+  labs(x = "Species Focus", colour = "Conservation Impact", fill = "Impact") +
+  scale_colour_manual(values = c("sienna3", "mediumpurple2", "#008080")) +
   scale_fill_manual(values  = c("sienna3", "mediumpurple2", "#008080")) +
   scale_y_continuous(labels = scales::percent_format(accuracy = 1), limits = c(0, 1))
 
@@ -316,7 +315,7 @@ combined_plots <- ggarrange(
 
 annotate_figure(combined_plots,
                 left = text_grob("Predicted Probability of Conservation Impact on Waterbird Populations", 
-                                 rot = 90, size = 13, color = "black"))
+                                 rot = 90, size = 13, colour = "black"))
 
 # Add shared Y-axis label
 annotate_figure(combined_plots,
@@ -332,75 +331,80 @@ plot4 <- ggplot(FitDat_diet, aes(x = Diet, y = Predicted, color = PAImpact)) +
                 position = position_dodge(width = 0.5)) +
   theme_classic() +
   theme(
-    axis.text.x  = element_text(angle = 0, hjust = 0.5, size = 10, color = "black"),
-    axis.title.x = element_text(size = 12, color = "black"),
-    axis.text.y  = element_text(size = 10, color = "black"),
+    axis.text.x  = element_text(angle = 0, hjust = 0.5, size = 10, colour = "black"),
+    axis.title.x = element_text(size = 12, colour = "black"),
+    axis.text.y  = element_text(size = 10, colour = "black"),
     axis.title.y = element_blank(),
-    legend.text  = element_text(size = 10, color = "black"),
+    legend.text  = element_text(size = 10, colour = "black"),
     legend.key.size = unit(0.5, "cm"),
     plot.margin  = unit(c(0.5, 0.5, 0.5, 1), "cm")
   ) +
-  labs(x = "Diet", color = "Conservation Impact", fill = "Impact") +
-  scale_color_manual(values = c("sienna3", "mediumpurple2", "#008080")) +
+  labs(x = "Diet", colour = "Conservation Impact", fill = "Impact") +
+  scale_colour_manual(values = c("sienna3", "mediumpurple2", "#008080")) +
   scale_fill_manual(values  = c("sienna3", "mediumpurple2", "#008080")) +
+  coord_cartesian(ylim = c(0,1)) +  
   scale_y_continuous(labels = scales::percent_format(accuracy = 1), limits = c(0, 1)) +
   theme(
-    legend.text  = element_text(size = 10, color = "black"), 
+    legend.text  = element_text(size = 10, colour = "black"), 
     legend.key.size = unit(0.5, "cm"), 
-    axis.title.x = element_text(size = 12, color = "black"), 
+    axis.title.x = element_text(size = 12, colour = "black"), 
     plot.margin  = unit(c(0.5, 0.5, 0.5, 1), "cm")
   )
+
+
+
 
 # ------------------------------
 # Plot 5: Migration Status
-plot5 <- ggplot(FitDat_migration, aes(x = MigStatus, y = Predicted, color = PAImpact)) + 
+plot5 <- ggplot(FitDat_migration, aes(x = MigStatus, y = Predicted, colour = PAImpact)) + 
   geom_point(position = position_dodge(width = 0.5), alpha = 1, size = 2) +
   geom_errorbar(aes(ymin = conf.low, ymax = conf.high), width = 0.2, alpha = 0.7,
                 position = position_dodge(width = 0.5)) +
   theme_classic() +
   theme(
-    axis.text.x  = element_text(angle = 0, hjust = 0.5, size = 10, color = "black"),
-    axis.text.y  = element_text(size = 10, color = "black"),
-    axis.title.x = element_text(size = 12, color = "black"),
+    axis.text.x  = element_text(angle = 0, hjust = 0.5, size = 10, colour = "black"),
+    axis.text.y  = element_text(size = 10, colour = "black"),
+    axis.title.x = element_text(size = 12, colour = "black"),
     axis.title.y = element_blank(),
-    legend.text  = element_text(size = 10, color = "black"),
+    legend.text  = element_text(size = 10, colour = "black"),
     legend.key.size = unit(0.5, "cm"),
     plot.margin  = unit(c(0.5, 0.5, 0.5, 1), "cm")
   ) +
-  labs(x = "Migration Status", color = "Conservation Impact", fill = "Impact") +
-  scale_color_manual(values = c("sienna3", "mediumpurple2", "#008080")) +
+  labs(x = "Migration Status", colour = "Conservation Impact", fill = "Impact") +
+  scale_colour_manual(values = c("sienna3", "mediumpurple2", "#008080")) +
   scale_fill_manual(values  = c("sienna3", "mediumpurple2", "#008080")) +
   scale_y_continuous(labels = scales::percent_format(accuracy = 1), limits = c(0, 1)) +
   theme(
-    legend.text  = element_text(size = 10, color = "black"), 
+    legend.text  = element_text(size = 10, colour = "black"), 
     legend.key.size = unit(0.5, "cm"), 
-    axis.title.x = element_text(size = 12, color = "black"), 
+    axis.title.x = element_text(size = 12, colour = "black"), 
     plot.margin  = unit(c(0.5, 0.5, 0.5, 1), "cm")
   )
 
 # ------------------------------
-# Plot 6: Waterbird Type
-plot6 <- ggplot(FitDat_wbt, aes(x = WaterbirdType, y = Predicted, color = PAImpact)) + 
+# Plot 6: Taxonomic Group
+
+plot6 <- ggplot(FitDat_wbt, aes(x = WaterbirdType, y = Predicted, colour = PAImpact)) + 
   geom_point(position = position_dodge(width = 0.5), alpha = 1, size = 2) +
   geom_errorbar(aes(ymin = conf.low, ymax = conf.high), width = 0.2, alpha = 0.7,
                 position = position_dodge(width = 0.5)) +
   theme_classic() +
   theme(
-    axis.text.x  = element_text(angle = 0, hjust = 0.5, size = 10, color = "black"),
-    axis.title.x = element_text(size = 12, color = "black"),
-    axis.text.y  = element_text(size = 10, color = "black"),
+    axis.text.x  = element_text(angle = 0, hjust = 0.5, size = 10, colour = "black"),
+    axis.title.x = element_text(size = 12, colour = "black"),
+    axis.text.y  = element_text(size = 10, colour = "black"),
     axis.title.y = element_blank(),
-    legend.text  = element_text(size = 10, color = "black"),
+    legend.text  = element_text(size = 10, colour = "black"),
     legend.key.size = unit(0.5, "cm"),
     plot.margin  = unit(c(0.5, 0.5, 0.5, 1), "cm")
   ) +
-  labs(x = "Waterbird Type", color = "Conservation Impact", fill = "Impact") +
-  scale_color_manual(values = c("sienna3", "mediumpurple2", "#008080")) +
+  labs(x = "Taxonomic Group", colour = "Conservation Impact", fill = "Impact") +
+  scale_colour_manual(values = c("sienna3", "mediumpurple2", "#008080")) +
   scale_fill_manual(values  = c("sienna3", "mediumpurple2", "#008080")) +
   scale_y_continuous(labels = scales::percent_format(accuracy = 1), limits = c(0, 1)) +
   theme(
-    legend.text  = element_text(size = 10, color = "black"), 
-    axis.title.x = element_text(size = 12, color = "black"),
+    legend.text  = element_text(size = 10, colour = "black"), 
+    axis.title.x = element_text(size = 12, colour = "black"),
     plot.margin  = unit(c(0.5, 0.5, 0.5, 1), "cm")
   )
 
@@ -421,10 +425,10 @@ grid.text("Predicted Probability of PA Impact on Waterbird Populations",
 
 # ------------------------------
 # Arrange plots 4, 5, 6 with a single shared legend
-combined_traits_plots_459 <- ggarrange(
+combined_traits_plots_456 <- ggarrange(
   plot4 + theme(legend.position = "right"),
   plot5 + theme(legend.position = "none"),
-  plot9 + theme(legend.position = "none"),
+  plot6 + theme(legend.position = "none"),
   ncol = 1,
   labels = c("a)", "b)", "c)"),
   font.label = list(size = 11, face = "plain"),
@@ -434,81 +438,83 @@ combined_traits_plots_459 <- ggarrange(
   legend = "right"
 )
 
-annotate_figure(combined_traits_plots_459,
+annotate_figure(combined_traits_plots_456,
                 left = text_grob("Predicted Probability of Conservation Impact on Waterbird Populations",
                                  rot = 90, size = 12, vjust = 1, color = "black"))
 
+
+
 # ------------------------------
 # Plot 7: Target Group
-plot7 <- ggplot(FitDat_target, aes(x = Target, y = Predicted, color = PAImpact)) + 
+plot7 <- ggplot(FitDat_target, aes(x = Target, y = Predicted, colour = PAImpact)) + 
   geom_point(position = position_dodge(width = 0.5), alpha = 1, size = 2) +
   geom_errorbar(aes(ymin = conf.low, ymax = conf.high), width = 0.2, alpha = 0.7,
                 position = position_dodge(width = 0.5)) +
   theme_classic() +
   theme(
-    axis.text.x  = element_text(angle = 0, hjust = 0.5, size = 10, color = "black"),
-    axis.title.x = element_text(size = 12, color = "black"),
-    axis.text.y  = element_text(size = 10, color = "black"),
+    axis.text.x  = element_text(angle = 0, hjust = 0.5, size = 10, colour = "black"),
+    axis.title.x = element_text(size = 12, colour = "black"),
+    axis.text.y  = element_text(size = 10, colour = "black"),
     axis.title.y = element_blank(),
-    legend.text  = element_text(size = 10, color = "black"),
+    legend.text  = element_text(size = 10, colour = "black"),
     legend.key.size = unit(0.5, "cm"),
     plot.margin  = unit(c(0.5, 0.5, 0.5, 1), "cm")
   ) +
-  labs(x = "Target Group", color = "Conservation Impact", fill = "Impact") +
-  scale_color_manual(values = c("sienna3", "mediumpurple2", "#008080")) +
+  labs(x = "Target Group", colour = "Conservation Impact", fill = "Impact") +
+  scale_colour_manual(values = c("sienna3", "mediumpurple2", "#008080")) +
   scale_fill_manual(values  = c("sienna3", "mediumpurple2", "#008080")) +
   scale_y_continuous(labels = scales::percent_format(accuracy = 1), limits = c(0, 1)) +
   theme(
-    legend.text  = element_text(size = 10, color = "black"), 
-    axis.title.x = element_text(size = 12, color = "black"),
+    legend.text  = element_text(size = 10, colour = "black"), 
+    axis.title.x = element_text(size = 12, colour = "black"),
     plot.margin  = unit(c(0.5, 0.5, 0.5, 1), "cm")
   )
 
 # ------------------------------
 # Plot 8: Specific Target Species
-plot8 <- ggplot(FitDat_spectarg, aes(x = SpecificTargetSp, y = Predicted, color = PAImpact)) + 
+plot8 <- ggplot(FitDat_spectarg, aes(x = SpecificTargetSp, y = Predicted, colour = PAImpact)) + 
   geom_point(position = position_dodge(width = 0.5), alpha = 1, size = 2) +
   geom_errorbar(aes(ymin = conf.low, ymax = conf.high), width = 0.2, alpha = 0.7,
                 position = position_dodge(width = 0.5)) +
   theme_classic() +
   theme(
-    axis.text.x  = element_text(angle = 0, hjust = 0.5, size = 10, color = "black"),
-    axis.title.x = element_text(size = 12, color = "black"),
-    axis.text.y  = element_text(size = 10, color = "black"),
+    axis.text.x  = element_text(angle = 0, hjust = 0.5, size = 10, colour = "black"),
+    axis.title.x = element_text(size = 12, colour = "black"),
+    axis.text.y  = element_text(size = 10, colour = "black"),
     axis.title.y = element_blank(),
-    legend.text  = element_text(size = 10, color = "black"),
+    legend.text  = element_text(size = 10, colour = "black"),
     legend.key.size = unit(0.5, "cm"),
     plot.margin  = unit(c(0.5, 0.5, 0.5, 1), "cm")
   ) +
-  labs(x = "Specific Target Species", color = "Conservation Impact", fill = "Impact") +
-  scale_color_manual(values = c("sienna3", "mediumpurple2", "#008080")) +
+  labs(x = "Specific Target Species", colour = "Conservation Impact", fill = "Impact") +
+  scale_colour_manual(values = c("sienna3", "mediumpurple2", "#008080")) +
   scale_fill_manual(values  = c("sienna3", "mediumpurple2", "#008080")) +
   scale_y_continuous(labels = scales::percent_format(accuracy = 1), limits = c(0, 1)) +
   theme(
-    legend.text  = element_text(size = 10, color = "black"), 
-    axis.title.x = element_text(size = 12, color = "black"),
+    legend.text  = element_text(size = 10, colour = "black"), 
+    axis.title.x = element_text(size = 12, colour = "black"),
     plot.margin  = unit(c(0.5, 0.5, 0.5, 1), "cm")
   )
 
 
 
 
-plot9 <- ggplot(FitDat_status, aes(x = SpeciesStatus, y = Predicted, color = PAImpact)) + 
+plot9 <- ggplot(FitDat_status, aes(x = SpeciesStatus, y = Predicted, colour = PAImpact)) + 
   geom_point(position = position_dodge(width = 0.5), alpha = 1, size = 2) +
   geom_errorbar(aes(ymin = conf.low, ymax = conf.high), width = 0.2, alpha = 0.7,
                 position = position_dodge(width = 0.5), na.rm = TRUE) +
   theme_classic() +
   theme(
-    axis.text.x  = element_text(angle = 0, hjust = 0.5, size = 10, color = "black"),
-    axis.title.x = element_text(size = 12, color = "black"),
-    axis.text.y  = element_text(size = 10, color = "black"),
+    axis.text.x  = element_text(angle = 0, hjust = 0.5, size = 10, colour = "black"),
+    axis.title.x = element_text(size = 12, colour = "black"),
+    axis.text.y  = element_text(size = 10, colour = "black"),
     axis.title.y = element_blank(),
-    legend.text  = element_text(size = 10, color = "black"),
+    legend.text  = element_text(size = 10, colour = "black"),
     legend.key.size = unit(0.5, "cm"),
     plot.margin  = unit(c(0.5, 0.5, 0.5, 1), "cm")
   ) +
-  labs(x = "Species Conservation Status", color = "Conservation Impact", fill = "Impact") +
-  scale_color_manual(values = c("sienna3", "mediumpurple2", "#008080")) +
+  labs(x = "Species Conservation Status", colour = "Conservation Impact", fill = "Impact") +
+  scale_colour_manual(values = c("sienna3", "mediumpurple2", "#008080")) +
   scale_fill_manual(values  = c("sienna3", "mediumpurple2", "#008080")) +
   scale_y_continuous(labels = scales::percent_format(accuracy = 1))
 
