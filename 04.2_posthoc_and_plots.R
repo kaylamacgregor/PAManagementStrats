@@ -24,7 +24,7 @@ library(grid)      # For annotations
 library(emmeans)   # For post-hoc comparisons
 
 ###########################################################################
-# 1. Extract Predictions l
+# 1. Extract Predictions 
 ###########################################################################
 
 
