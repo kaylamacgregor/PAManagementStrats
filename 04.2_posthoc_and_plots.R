@@ -8,7 +8,7 @@
 # Assumptions:
 #   - The dataset 'birddata' is already loaded (see 01_data_preprocessing.R).
 #   - The models (mod_primary, mod_intervention, mod_speciesfocus, mod_diet,
-#     mod_migration, mod_target, mod_wbt, mod_status, mod_spectarg) have been fitted 
+#     mod_migration, mod_target, mod_wbt, mod_ssppom, mod_stppom) have been fitted 
 #     in the modelling script (03_modelling.R).
 
 ## 
