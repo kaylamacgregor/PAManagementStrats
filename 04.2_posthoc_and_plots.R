@@ -62,7 +62,7 @@ print(ModelPredictions_mod_target)
 ModelPredictions_mod_spectarg <- ggpredict(mod_stsppom, terms = c("SpecificTargetSp"), type = "re")
 print(ModelPredictions_mod_spectarg)
 
-ModelPredictions_mod_status <- ggpredict(mod_status, terms = c("SpeciesStatus"), type = "re")
+ModelPredictions_mod_status <- ggpredict(mod_ssppom, terms = c("SpeciesStatus"), type = "re")
 print(ModelPredictions_mod_status)
 
 # --- A. Primary Objective ---
@@ -174,7 +174,7 @@ glimpse(FitDat_wbt)
 
 
 # --- H. Species Status ---
-FitDat_status <- data.frame(ggpredict(mod_status, terms = c("SpeciesStatus"), type = "re")) %>%
+FitDat_status <- data.frame(ggpredict(mod_ssppom, terms = c("SpeciesStatus"), type = "re")) %>%
   rename(PAImpact = group, SpeciesStatus = x, Predicted = predicted)
 FitDat_status$PAImpact <- factor(FitDat_status$PAImpact,
                                  levels = c(1, 2, 3),
