@@ -1,5 +1,6 @@
 ################################################################################
 # 04.2_posthoc_and_plots.R
+#
 # Purpose:
 #   - Extract model predictions using ggpredict() from fitted CLMM models.
 #   - Generate ggplot figures for predictive probability plots.
@@ -8,7 +9,7 @@
 # Assumptions:
 #   - The dataset 'birddata' is already loaded (see 01_data_preprocessing.R).
 #   - The models (mod_primary, mod_intervention, mod_speciesfocus, mod_diet,
-#     mod_migration, mod_target, mod_wbt, mod_ssppom, mod_stppom) have been fitted 
+#     mod_migration, mod_target, mod_wbt, mod_status, mod_spectarg) have been fitted 
 #     in the modelling script (03_modelling.R).
 
 ## 
@@ -24,7 +25,7 @@ library(grid)      # For annotations
 library(emmeans)   # For post-hoc comparisons
 
 ###########################################################################
-# 1. Extract Predictions 
+# 1. Extract Predictions l
 ###########################################################################
 
 
@@ -226,7 +227,10 @@ plot1test <- ggplot(FitDat_primary, aes(x = PrimaryObjective, y = Predicted, col
   labs(x = "Primary Objective of Management", colour = "Conservation Impact", fill = "Impact") +
   scale_colour_manual(values = c("sienna3", "mediumpurple2", "#008080")) +
   scale_fill_manual(values  = c("sienna3", "mediumpurple2", "#008080")) +
-  scale_y_continuous(labels = scales::percent_format(accuracy = 1), limits = c(0, 1))
+  scale_y_continuous(
+    labels = scales::number_format(scale = 100, accuracy = 1), 
+    limits = c(0, 1)
+  )
 
 
 # ------------------------------
@@ -248,7 +252,10 @@ plot2test <- ggplot(FitDat_int, aes(x = Interventions, y = Predicted, colour = P
   labs(x = "Management Intervention", colour = "Conservation Impact", fill = "Impact") +
   scale_colour_manual(values = c("sienna3", "mediumpurple2", "#008080")) +
   scale_fill_manual(values  = c("sienna3", "mediumpurple2", "#008080")) +
-  scale_y_continuous(labels = scales::percent_format(accuracy = 1), limits = c(0, 1))
+  scale_y_continuous(
+    labels = scales::number_format(scale = 100, accuracy = 1), 
+    limits = c(0, 1)
+  )
 
 
 # ------------------------------
@@ -270,8 +277,10 @@ plot3test <- ggplot(FitDat_spf, aes(x = SpeciesFocus, y = Predicted, colour = PA
   labs(x = "Species Focus", colour = "Conservation Impact", fill = "Impact") +
   scale_colour_manual(values = c("sienna3", "mediumpurple2", "#008080")) +
   scale_fill_manual(values  = c("sienna3", "mediumpurple2", "#008080")) +
-  scale_y_continuous(labels = scales::percent_format(accuracy = 1), limits = c(0, 1))
-
+  scale_y_continuous(
+    labels = scales::number_format(scale = 100, accuracy = 1), 
+    limits = c(0, 1)
+  )
 
 # ------------------------------
 # Arrange the three plots in one column and add labels & shared y-axis label
@@ -297,7 +306,7 @@ combined_plots <- ggarrange(
 )
 
 annotate_figure(combined_plots,
-                left = text_grob("Predicted Probability of PA Impact on Waterbird Populations", 
+                left = text_grob("Predicted Probability of PA Impact on Waterbird Populations (%)", 
                                  rot = 90, size = 12, color = "black"))
 
 combined_plots <- ggarrange(
@@ -314,12 +323,12 @@ combined_plots <- ggarrange(
 )
 
 annotate_figure(combined_plots,
-                left = text_grob("Predicted Probability of Conservation Impact on Waterbird Populations", 
-                                 rot = 90, size = 13, colour = "black"))
+                left = text_grob("Predicted Probability of Conservation Impact on Waterbird Populations (%)", 
+                                 rot = 90, size = 13, color = "black"))
 
 # Add shared Y-axis label
 annotate_figure(combined_plots,
-                left = text_grob("Predicted Probability of Conservation Impact on Waterbird Populations",
+                left = text_grob("Predicted Probability of Conservation Impact on Waterbird Populations (%)",
                                  rot = 90, size = 12, vjust = 1))
 
 
@@ -343,7 +352,9 @@ plot4 <- ggplot(FitDat_diet, aes(x = Diet, y = Predicted, color = PAImpact)) +
   scale_colour_manual(values = c("sienna3", "mediumpurple2", "#008080")) +
   scale_fill_manual(values  = c("sienna3", "mediumpurple2", "#008080")) +
   coord_cartesian(ylim = c(0,1)) +  
-  scale_y_continuous(labels = scales::percent_format(accuracy = 1), limits = c(0, 1)) +
+  scale_y_continuous(
+    labels = scales::number_format(scale = 100, accuracy = 1), 
+    limits = c(0, 1)) +
   theme(
     legend.text  = element_text(size = 10, colour = "black"), 
     legend.key.size = unit(0.5, "cm"), 
@@ -373,7 +384,10 @@ plot5 <- ggplot(FitDat_migration, aes(x = MigStatus, y = Predicted, colour = PAI
   labs(x = "Migration Status", colour = "Conservation Impact", fill = "Impact") +
   scale_colour_manual(values = c("sienna3", "mediumpurple2", "#008080")) +
   scale_fill_manual(values  = c("sienna3", "mediumpurple2", "#008080")) +
-  scale_y_continuous(labels = scales::percent_format(accuracy = 1), limits = c(0, 1)) +
+  scale_y_continuous(
+    labels = scales::number_format(scale = 100, accuracy = 1), 
+    limits = c(0, 1)
+  ) +
   theme(
     legend.text  = element_text(size = 10, colour = "black"), 
     legend.key.size = unit(0.5, "cm"), 
@@ -401,7 +415,10 @@ plot6 <- ggplot(FitDat_wbt, aes(x = WaterbirdType, y = Predicted, colour = PAImp
   labs(x = "Taxonomic Group", colour = "Conservation Impact", fill = "Impact") +
   scale_colour_manual(values = c("sienna3", "mediumpurple2", "#008080")) +
   scale_fill_manual(values  = c("sienna3", "mediumpurple2", "#008080")) +
-  scale_y_continuous(labels = scales::percent_format(accuracy = 1), limits = c(0, 1)) +
+  scale_y_continuous(
+    labels = scales::number_format(scale = 100, accuracy = 1), 
+    limits = c(0, 1)
+  ) +
   theme(
     legend.text  = element_text(size = 10, colour = "black"), 
     axis.title.x = element_text(size = 12, colour = "black"),
@@ -439,7 +456,7 @@ combined_traits_plots_456 <- ggarrange(
 )
 
 annotate_figure(combined_traits_plots_456,
-                left = text_grob("Predicted Probability of Conservation Impact on Waterbird Populations",
+                left = text_grob("Predicted Probability of Conservation Impact on Waterbird Populations (%)",
                                  rot = 90, size = 12, vjust = 1, color = "black"))
 
 
@@ -463,7 +480,10 @@ plot7 <- ggplot(FitDat_target, aes(x = Target, y = Predicted, colour = PAImpact)
   labs(x = "Target Group", colour = "Conservation Impact", fill = "Impact") +
   scale_colour_manual(values = c("sienna3", "mediumpurple2", "#008080")) +
   scale_fill_manual(values  = c("sienna3", "mediumpurple2", "#008080")) +
-  scale_y_continuous(labels = scales::percent_format(accuracy = 1), limits = c(0, 1)) +
+  scale_y_continuous(
+    labels = scales::number_format(scale = 100, accuracy = 1), 
+    limits = c(0, 1)
+  ) +
   theme(
     legend.text  = element_text(size = 10, colour = "black"), 
     axis.title.x = element_text(size = 12, colour = "black"),
@@ -489,7 +509,10 @@ plot8 <- ggplot(FitDat_spectarg, aes(x = SpecificTargetSp, y = Predicted, colour
   labs(x = "Specific Target Species", colour = "Conservation Impact", fill = "Impact") +
   scale_colour_manual(values = c("sienna3", "mediumpurple2", "#008080")) +
   scale_fill_manual(values  = c("sienna3", "mediumpurple2", "#008080")) +
-  scale_y_continuous(labels = scales::percent_format(accuracy = 1), limits = c(0, 1)) +
+  scale_y_continuous(
+    labels = scales::number_format(scale = 100, accuracy = 1), 
+    limits = c(0, 1)
+  ) +
   theme(
     legend.text  = element_text(size = 10, colour = "black"), 
     axis.title.x = element_text(size = 12, colour = "black"),
@@ -516,7 +539,10 @@ plot9 <- ggplot(FitDat_status, aes(x = SpeciesStatus, y = Predicted, colour = PA
   labs(x = "Species Conservation Status", colour = "Conservation Impact", fill = "Impact") +
   scale_colour_manual(values = c("sienna3", "mediumpurple2", "#008080")) +
   scale_fill_manual(values  = c("sienna3", "mediumpurple2", "#008080")) +
-  scale_y_continuous(labels = scales::percent_format(accuracy = 1))
+  scale_y_continuous(
+    labels = scales::number_format(scale = 100, accuracy = 1), 
+    limits = c(0, 1)
+  )
 
 
 # ------------------------------
@@ -544,7 +570,7 @@ combined_targ_plots <- ggarrange(
 )
 
 annotate_figure(combined_targ_plots,
-                left = text_grob("Predicted Probability of Conservation Impact on Waterbird Populations",
+                left = text_grob("Predicted Probability of Conservation Impact on Waterbird Populations (%)",
                                  rot = 90, size = 12, vjust = 1, color = "black"))
 
 
