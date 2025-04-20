@@ -194,28 +194,6 @@ ggsave("map_int.png", map_intervention, width = 6, height = 4, dpi = 300)
 ggsave("map_species_focus.png", map_speciesfocus, width = 6, height = 4, dpi = 300)
 
 
-
-
-
-
-
-###### THINK OF WHAT TO DO FOR THIS SECTION DONT FORGET!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-## Optional Map with Additional Cartographic Elements
-map_with_elements <- ggplot() +
-  geom_sf(data = scotland_map, fill = "grey95", colour = "black") +
-  geom_sf(data = sites_sf, aes(colour = DESIG), size = 2, alpha = 0.9) +
-  scale_colour_brewer(palette = "Set2", name = "Designation") +
-  theme_classic() +
-  theme(legend.position = "right",
-        plot.title = element_text(size = 14, face = "bold", colour = "black"),
-        plot.subtitle = element_text(size = 10, colour = "black")) +
-  annotation_scale(location = "bl", width_hint = 0.3) +
-  annotation_north_arrow(location = "tl", which_north = "true", style = north_arrow_fancy_orienteering)
-print(map_with_elements)
-
-
-
 ################################################################################
 # End of 05_mapping.R
 ################################################################################
